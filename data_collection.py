@@ -6,10 +6,17 @@ import os
 mpHolistic=mp.solutions.holistic
 mpDraw=mp.solutions.drawing_utils
 vid=cv2.VideoCapture(0)
+
+#path for flatten datas
+dataPath = os.path.join('Sign_Data')
+
+#path for images
+imgPath= os.path.join('Sign_Image')
+
 signs=np.array(["Hello","Thank You"])
 
 #30 video of each sign
-noSequences=30
+numSequences=30
 
 #length of each video
 sequenceLength=30
@@ -31,37 +38,76 @@ def extractKeypoints():
 
 # making folders if not exist
 for sign in signs:
-    for sequence in range(noSequences):
+    for sequence in range(numSequences):
             try:
-                os.makedirs(os.path.join("Sign_Data",sign,str(sequence)))
+                os.makedirs(os.path.join(dataPath,sign,str(sequence)))
+                os.makedirs(os.path.join(imgPath,sign,str(sequence)))
             except:
                 pass
-# if not os.path.exists("Sign_Data"):
-#     os.mkdir("Sign_Data")
-# else:
-#     print("already exist")
 
 with mpHolistic.Holistic() as holistic:
-    #checking is camera is opened or not
-    while vid.isOpened():
-        success,img=vid.read()
-        #checking if data is accessed or not from camera
-        if not success:
+
+    #taking label input 
+    while True:
+        blankImg = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
+        cv2.putText(blankImg,"Select label: ", (10,50),cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"0: Hello , 1: Thank You", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"'ESC' to escape", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.imshow('Select label',blankImg)
+        inpt=cv2.waitKey(0)
+        if inpt == 48 or inpt == 49:
+            choice=signs[inpt-48]
+            cv2.destroyWindow('Select label')
             break
-        img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-        # img.flags.writeable=False
-        results=holistic.process(img) 
-        # img.flags.writeable=True     
-        img=cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
-        drawLandmarks()
-        #shows image in frame
-        cv2.imshow('Collecting data',img)
-        if cv2.waitKey(1) == 27 : #press esc to close the window
-            print(len(results.face_landmarks.landmark))
-            break
+        else:
+            if inpt==27:
+                break
+            
+    #checking camera is opened or not and taking data    
+    while vid.isOpened() and inpt!=27 :
+        for sequence in range(numSequences):
+            for frameNum in range(sequenceLength+1):
+                #checks for user input to close the windows                
+                key=cv2.waitKey(1)
+                if key == 27 : #press esc to close the window
+                    break
+                    
+                success,img=vid.read()
+                
+                #checking if data is accessed or not from camera
+                if not success:
+                    break  
+                img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+                # img.flags.writeable=False
+                results=holistic.process(img) 
+                # img.flags.writeable=True     
+                img=cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
+                
+                #draws landmarks
+                drawLandmarks()
+                
+                #show feed for collecting datas and delays for 2 sec
+                if frameNum == 0: 
+                    cv2.putText(img, 'STARTING COLLECTION', (120,200), 
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0, 0), 2, cv2.LINE_AA)
+                    cv2.imshow('Collecting Datas', img)
+                    cv2.waitKey(2000)
+                    
+                #starts collecting datas    
+                else: 
+                    cv2.putText(img, f"Collecting Data for '{choice}' Video Number {sequence}", (15,20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA) 
+                    cv2.imshow('Collecting Datas', img)
+                    keypoints=extractKeypoints()  
+                    np.save(os.path.join(dataPath,choice,str(sequence),str(frameNum-1)),keypoints)
+                    jpgPath=os.path.join(imgPath,choice,str(sequence),str(frameNum-1))
+                    cv2.imwrite(f"{jpgPath}.jpg",img)
+            if key == 27 : #press esc to close the window
+                break        
+        if key == 27 : #press esc to close the window
+            break             
             
 #releasing the port            
 vid.release() 
 
 #destroying all opened windows using opencv
-cv2.destroyAllWindows() 
+cv2.destroyAllWindows()   
