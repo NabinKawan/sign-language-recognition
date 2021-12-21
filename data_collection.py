@@ -10,6 +10,8 @@ vid=cv2.VideoCapture(0)
 #path for flatten datas
 dataPath = os.path.join('Sign_Data')
 
+key=1
+
 #path for images
 imgPath= os.path.join('Sign_Image')
 
@@ -63,15 +65,30 @@ with mpHolistic.Holistic() as holistic:
             if inpt==27:
                 break
             
+with mpHolistic.Holistic() as holistic:
+
+    #taking label input 
+    while True:
+        blankImg = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
+        cv2.putText(blankImg,"Select label: ", (10,50),cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"0: Hello , 1: Thank You", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"'ESC' to escape", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.imshow('Select label',blankImg)
+        inpt=cv2.waitKey(0)
+        if inpt == 48 or inpt == 49:
+            choice=signs[inpt-48]
+            cv2.destroyWindow('Select label')
+            break
+        else:
+            if inpt==27:
+                break
+            
     #checking camera is opened or not and taking data    
     while vid.isOpened() and inpt!=27 :
         for sequence in range(numSequences):
             for frameNum in range(sequenceLength+1):
                 #checks for user input to close the windows                
-                key=cv2.waitKey(1)
-                if key == 27 : #press esc to close the window
-                    break
-                    
+                key=cv2.waitKey(1)                  
                 success,img=vid.read()
                 
                 #checking if data is accessed or not from camera
@@ -88,19 +105,29 @@ with mpHolistic.Holistic() as holistic:
                 
                 #show feed for collecting datas and delays for 2 sec
                 if frameNum == 0: 
-                    cv2.putText(img, 'STARTING COLLECTION', (120,200), 
-                               cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,0, 0), 2, cv2.LINE_AA)
+                    cv2.putText(img, "Press 'ESC' to escape", (10,20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA) 
+                    cv2.putText(img, 'Starting collection in 3 sec', (10,60), 
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0, 0), 1, cv2.LINE_AA)
                     cv2.imshow('Collecting Datas', img)
-                    cv2.waitKey(2000)
+                    key= cv2.waitKey(3000)
                     
                 #starts collecting datas    
                 else: 
                     cv2.putText(img, f"Collecting Data for '{choice}' Video Number {sequence}", (15,20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA) 
                     cv2.imshow('Collecting Datas', img)
                     keypoints=extractKeypoints()  
+                    
+                    #saving flatten array to datapath
                     np.save(os.path.join(dataPath,choice,str(sequence),str(frameNum-1)),keypoints)
+                    
+                    #saving image to image path
                     jpgPath=os.path.join(imgPath,choice,str(sequence),str(frameNum-1))
                     cv2.imwrite(f"{jpgPath}.jpg",img)
+                    key=2 #giving default value for key to avoid esc while taking data
+
+                if key == 27 : #press esc to close the window
+                    break 
+
             if key == 27 : #press esc to close the window
                 break        
         if key == 27 : #press esc to close the window
@@ -110,4 +137,4 @@ with mpHolistic.Holistic() as holistic:
 vid.release() 
 
 #destroying all opened windows using opencv
-cv2.destroyAllWindows()   
+cv2.destroyAllWindows()            
