@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import os
+import time
 
 mpHolistic=mp.solutions.holistic
 mpDraw=mp.solutions.drawing_utils
@@ -15,7 +16,7 @@ key=1
 #path for images
 imgPath= os.path.join('Sign_Image')
 
-signs=np.array(["Hello","Thank You"])
+signs=np.array(["Hello","Thank You", "Hungry", "Food", "Hospital", "Washroom"])
 
 #30 video of each sign
 numSequences=30
@@ -52,37 +53,21 @@ with mpHolistic.Holistic() as holistic:
     #taking label input 
     while True:
         blankImg = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
-        cv2.putText(blankImg,"Select label: ", (10,50),cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"Select label: ", (10,50),cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"0: Hello , 1: Thank You", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
-        cv2.putText(blankImg,"'ESC' to escape", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"2: Hungry , 3: Food", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"4: Hospital , 5: Washroom", (10,200),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"'ESC' to escape", (10,250),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
         cv2.imshow('Select label',blankImg)
         inpt=cv2.waitKey(0)
-        if inpt == 48 or inpt == 49:
+        if inpt == 48 or inpt == 49 or inpt == 50 or inpt == 51 or inpt == 52 or inpt == 53:
             choice=signs[inpt-48]
             cv2.destroyWindow('Select label')
             break
         else:
             if inpt==27:
                 break
-            
-with mpHolistic.Holistic() as holistic:
-
-    #taking label input 
-    while True:
-        blankImg = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
-        cv2.putText(blankImg,"Select label: ", (10,50),cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 1, cv2.LINE_AA)
-        cv2.putText(blankImg,"0: Hello , 1: Thank You", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
-        cv2.putText(blankImg,"'ESC' to escape", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
-        cv2.imshow('Select label',blankImg)
-        inpt=cv2.waitKey(0)
-        if inpt == 48 or inpt == 49:
-            choice=signs[inpt-48]
-            cv2.destroyWindow('Select label')
-            break
-        else:
-            if inpt==27:
-                break
-            
+                     
     #checking camera is opened or not and taking data    
     while vid.isOpened() and inpt!=27 :
         for sequence in range(numSequences):
