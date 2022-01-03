@@ -91,10 +91,11 @@ with mpHolistic.Holistic() as holistic:
                 #show feed for collecting datas and delays for 2 sec
                 if frameNum == 0: 
                     cv2.putText(img, "Press 'ESC' to escape", (10,20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA) 
-                    cv2.putText(img, 'Starting collection in 3 sec', (10,60), 
+                    cv2.putText(img, 'press any key to conitnue', (10,60), 
                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0, 0), 1, cv2.LINE_AA)
                     cv2.imshow('Collecting Datas', img)
-                    key= cv2.waitKey(3000)
+                    key= cv2.waitKey(0)
+                    cv2.waitKey(1000)
                     
                 #starts collecting datas    
                 else: 
@@ -109,9 +110,9 @@ with mpHolistic.Holistic() as holistic:
                     jpgPath=os.path.join(imgPath,choice,str(sequence),str(frameNum-1))
                     cv2.imwrite(f"{jpgPath}.jpg",img)
                     key=2 #giving default value for key to avoid esc while taking data
-
+                
                 if key == 27 : #press esc to close the window
-                    break 
+                    break     
 
             if key == 27 : #press esc to close the window
                 break        
