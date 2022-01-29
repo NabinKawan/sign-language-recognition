@@ -13,6 +13,7 @@ dataPath = os.path.join('Sign_Data')
 
 key=1
 
+
 #path for images
 imgPath= os.path.join('Sign_Image')
 
@@ -21,11 +22,12 @@ signs=np.array(["Hello","Thank You", "Hungry", "Food", "Hospital", "Washroom"])
 #30 video of each sign
 numSequences=30
 
+
 #length of each video
 sequenceLength=30
 
 #draw landmarks in image
-def drawLandmarks():
+def drawLandmarks(s):
     mpDraw.draw_landmarks(img,results.face_landmarks,mpHolistic.FACEMESH_CONTOURS,mpDraw.DrawingSpec(color=(80, 110, 10), thickness=1, circle_radius=1),mpDraw.DrawingSpec(color=(80, 256, 121), thickness=2, circle_radius=2))
     mpDraw.draw_landmarks(img,results.pose_landmarks,mpHolistic.POSE_CONNECTIONS,mpDraw.DrawingSpec(color=(80, 22, 10), thickness=1, circle_radius=1),mpDraw.DrawingSpec(color=(80, 44, 121), thickness=2, circle_radius=2))
     mpDraw.draw_landmarks(img,results.left_hand_landmarks,mpHolistic.HAND_CONNECTIONS,mpDraw.DrawingSpec(color=(121, 22, 90), thickness=1, circle_radius=1),mpDraw.DrawingSpec(color=(255, 100, 112), thickness=2, circle_radius=2))
