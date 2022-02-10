@@ -19,7 +19,7 @@ imgPath= os.path.join('Sign_Image')
 signs=np.array(["Hello","Thank You", "Hungry", "Food", "Hospital", "Washroom"])
 
 #30 video of each sign
-numSequences=30
+numSequences=60
 
 
 #length of each video
@@ -71,7 +71,7 @@ with mpHolistic.Holistic() as holistic:
                      
     #checking camera is opened or not and taking data    
     while vid.isOpened() and inpt!=27 :
-        for sequence in range(numSequences):
+        for sequence in range(30,60):
             for frameNum in range(sequenceLength+1):
                 #checks for user input to close the windows                
                 key=cv2.waitKey(1)                  
