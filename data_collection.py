@@ -16,10 +16,10 @@ key=1
 #path for images
 imgPath= os.path.join('Sign_Image')
 
-signs=np.array(["Hello","Thank You", "Hungry", "Food", "Hospital", "Washroom"])
+signs=np.array(["Ambulance","Fight", "Clap", "Hungry", "Help", "Medicine"])
 
 #30 video of each sign
-numSequences=60
+numSequences=30
 
 
 #length of each video
@@ -55,9 +55,9 @@ with mpHolistic.Holistic() as holistic:
     while True:
         blankImg = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
         cv2.putText(blankImg,"Select label: ", (10,50),cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 1, cv2.LINE_AA)
-        cv2.putText(blankImg,"0: Hello , 1: Thank You", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
-        cv2.putText(blankImg,"2: Hungry , 3: Food", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
-        cv2.putText(blankImg,"4: Hospital , 5: Washroom", (10,200),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"0: Ambulance , 1: Fight", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"2: Clap , 3: Hungry", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"4: Help , 5: Medicine", (10,200),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"'ESC' to escape", (10,250),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
         cv2.imshow('Select label',blankImg)
         inpt=cv2.waitKey(0)
@@ -71,7 +71,7 @@ with mpHolistic.Holistic() as holistic:
                      
     #checking camera is opened or not and taking data    
     while vid.isOpened() and inpt!=27 :
-        for sequence in range(30,60):
+        for sequence in range(30):
             for frameNum in range(sequenceLength+1):
                 #checks for user input to close the windows                
                 key=cv2.waitKey(1)                  
@@ -95,8 +95,14 @@ with mpHolistic.Holistic() as holistic:
                     cv2.putText(img, 'starts in 2 sec', (10,60), 
                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0, 0), 1, cv2.LINE_AA)
                     cv2.imshow('Collecting Datas', img)
-                    key= cv2.waitKey(2000)
-                    # cv2.waitKey(2000)
+
+                    temp_key= cv2.waitKey(2000)
+                    if(temp_key==27):
+                       key=27
+                    #if(temp_key==32):
+                    #   cv2.waitKey(2000)
+                    #elif(temp_key==27):
+                    #   key=27                  
                 
                 #starts collecting datas    
                 else: 
