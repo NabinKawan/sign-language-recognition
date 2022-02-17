@@ -16,10 +16,14 @@ key=1
 #path for images
 imgPath= os.path.join('Sign_Image')
 
+<<<<<<< HEAD
 signs=np.array(["Ambulance","Fight", "Clap", "Hungry", "Help", "Medicine","Accident","ill","Hospital","Washroom"])
+=======
+signs=np.array(["Accident","Ambulance","Hungry","Medicine","Washroom","ill"])
+>>>>>>> 24ca619bc4d2023e7a584f2c8cfa955db0bf492a
 
 #30 video of each sign
-numSequences=90
+numSequences=60
 
 
 #length of each video
@@ -49,18 +53,31 @@ for sign in signs:
             except:
                 pass
 
+
 with mpHolistic.Holistic() as holistic:
 
     #taking label input 
     while True:
         blankImg = np.zeros(shape=[512, 512, 3], dtype=np.uint8)
         cv2.putText(blankImg,"Select label: ", (10,50),cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 1, cv2.LINE_AA)
+<<<<<<< HEAD
         cv2.putText(blankImg,"0: Ambulance , 1: Fight", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"2: Clap , 3: Hungry", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"4: Help , 5: Medicine", (10,200),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"6: Accident , 7: ill", (10,250),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"8: Hospital , 9: Washroom", (10,300),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 300, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"'ESC' to escape", (10,350),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 350), 1, cv2.LINE_AA)
+=======
+        cv2.putText(blankImg,"0: Accident , 1: Ambulance", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"2: Hungry , 3: Medicine", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"4: washroom , 5: ill", (10,200),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+
+        
+        cv2.putText(blankImg,"'ESC' to escape", (10,250),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+
+
+        
+>>>>>>> 24ca619bc4d2023e7a584f2c8cfa955db0bf492a
         cv2.imshow('Select label',blankImg)
         inpt=cv2.waitKey(0)
         
@@ -74,7 +91,7 @@ with mpHolistic.Holistic() as holistic:
                      
     #checking camera is opened or not and taking data    
     while vid.isOpened() and inpt!=27 :
-        for sequence in range(60,90):
+        for sequence in range(30,60):
             for frameNum in range(sequenceLength+1):
                 #checks for user input to close the windows                
                 key=cv2.waitKey(1)                  
@@ -99,14 +116,14 @@ with mpHolistic.Holistic() as holistic:
                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0, 0), 1, cv2.LINE_AA)
                     cv2.imshow('Collecting Datas', img)
 
-                    temp_key= cv2.waitKey(2000)
-                    if(temp_key==27):
-                       key=27
-                    #if(temp_key==32):
-                    #   cv2.waitKey(2000)
-                    #elif(temp_key==27):
-                    #   key=27                  
-                
+                    temp_key= cv2.waitKey()
+                    #if(temp_key==27):
+                    #   key=27
+                    if(temp_key==32):
+                       cv2.waitKey(2000)
+                    elif(temp_key==27):
+                       key=27                  
+             
                 #starts collecting datas    
                 else: 
                     cv2.putText(img, f"Collecting Data for '{choice}' Video Number {sequence}", (15,20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA) 
