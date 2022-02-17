@@ -2,7 +2,6 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import os
-import time
 
 mpHolistic=mp.solutions.holistic
 mpDraw=mp.solutions.drawing_utils
@@ -13,13 +12,15 @@ dataPath = os.path.join('Sign_Data')
 
 key=1
 
+
 #path for images
 imgPath= os.path.join('Sign_Image')
 
 signs=np.array(["Hello","Thank You", "Hungry", "Food", "Hospital", "Washroom"])
 
 #30 video of each sign
-numSequences=30
+numSequences=60
+
 
 #length of each video
 sequenceLength=30
@@ -70,7 +71,7 @@ with mpHolistic.Holistic() as holistic:
                      
     #checking camera is opened or not and taking data    
     while vid.isOpened() and inpt!=27 :
-        for sequence in range(numSequences):
+        for sequence in range(30,60):
             for frameNum in range(sequenceLength+1):
                 #checks for user input to close the windows                
                 key=cv2.waitKey(1)                  
@@ -91,12 +92,12 @@ with mpHolistic.Holistic() as holistic:
                 #show feed for collecting datas and delays for 2 sec
                 if frameNum == 0: 
                     cv2.putText(img, "Press 'ESC' to escape", (10,20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA) 
-                    cv2.putText(img, 'press any key to conitnue', (10,60), 
+                    cv2.putText(img, 'starts in 2 sec', (10,60), 
                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0, 0), 1, cv2.LINE_AA)
                     cv2.imshow('Collecting Datas', img)
-                    key= cv2.waitKey(0)
-                    cv2.waitKey(1000)
-                    
+                    key= cv2.waitKey(2000)
+                    # cv2.waitKey(2000)
+                
                 #starts collecting datas    
                 else: 
                     cv2.putText(img, f"Collecting Data for '{choice}' Video Number {sequence}", (15,20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA) 
@@ -110,10 +111,10 @@ with mpHolistic.Holistic() as holistic:
                     jpgPath=os.path.join(imgPath,choice,str(sequence),str(frameNum-1))
                     cv2.imwrite(f"{jpgPath}.jpg",img)
                     key=2 #giving default value for key to avoid esc while taking data
-                
+
+
                 if key == 27 : #press esc to close the window
                     break     
-
             if key == 27 : #press esc to close the window
                 break        
         if key == 27 : #press esc to close the window
