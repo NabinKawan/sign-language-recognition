@@ -16,7 +16,7 @@ key=1
 #path for images
 imgPath= os.path.join('Sign_Image')
 
-signs=np.array(["Ambulance","Fight", "Clap", "Hungry", "Help", "Medicine","Accident","ill","Hospital"])
+signs=np.array(["Ambulance","Fight", "Clap", "Hungry", "Help", "Medicine","Accident","ill","Hospital","Washroom"])
 
 #30 video of each sign
 numSequences=90
@@ -58,11 +58,13 @@ with mpHolistic.Holistic() as holistic:
         cv2.putText(blankImg,"0: Ambulance , 1: Fight", (10,100),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"2: Clap , 3: Hungry", (10,150),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.putText(blankImg,"4: Help , 5: Medicine", (10,200),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
-        cv2.putText(blankImg,"6: Accident , 7: ill, 8: Washroom ", (10,250),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
-        cv2.putText(blankImg,"'ESC' to escape", (10,300),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"6: Accident , 7: ill", (10,250),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"8: Hospital , 9: Washroom", (10,300),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 300, 0), 1, cv2.LINE_AA)
+        cv2.putText(blankImg,"'ESC' to escape", (10,350),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 350), 1, cv2.LINE_AA)
         cv2.imshow('Select label',blankImg)
         inpt=cv2.waitKey(0)
-        if inpt == 48 or inpt == 49 or inpt == 50 or inpt == 51 or inpt == 52 or inpt == 53 or inpt==54 or inpt==55 or inpt==56 :
+        
+        if inpt == 48 or inpt == 49 or inpt == 50 or inpt == 51 or inpt == 52 or inpt == 53 or inpt==54 or inpt==55 or inpt==56 or inpt==57:
             choice=signs[inpt-48]
             cv2.destroyWindow('Select label')
             break
