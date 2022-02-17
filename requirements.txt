@@ -1,4 +1,10 @@
 opencv-python
+<<<<<<< HEAD
 mediapipe
 tensorflow
 sklearn
+=======
+tensorflow
+tensorboard
+mediapipe
+>>>>>>> b805f5ffb3ff8b9e7741d514271380ee54dce317
