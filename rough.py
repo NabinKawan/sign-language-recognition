@@ -5,3 +5,4 @@ def gen():
 ob=gen()
 print(ob.__next__())
 print(ob.__next__())
+
